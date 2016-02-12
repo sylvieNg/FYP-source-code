@@ -81,6 +81,9 @@ nav ul ul li a {
 nav ul ul li a:hover {
 	background: grey ;
 }
+h1{
+	color:white;
+}
 .filter{
 	float: left;
 	margin-left: 3em;

@@ -3,7 +3,7 @@
 include ('database.php');
 include ('session.php');
 ?>
-<html>
+<html lang="en">
 <head>
 	<style>
 	body,html{
@@ -69,6 +69,9 @@ nav ul ul li a {
 nav ul ul li a:hover {
 	background: grey ;
 }
+h1{
+	color:white;
+}
 .apply{
 	margin-left: 3em;
 }
@@ -99,7 +102,6 @@ nav ul ul li a:hover {
 				<li class="dropdown"><a href="#">Setting</a>
 	        	<ul class="dropdown-menu">
 		        	<li><a href="employerinfo.php">Persona</a></li>
-		        	<li><a href="posted.php">My posted job</a></li>
 					<li><a href="#">My feedback</a></li>
 					<li><a href="message.php">My message</a></li>
 					<li><a href="#">Deactivate</a></li>
@@ -136,7 +138,7 @@ nav ul ul li a:hover {
 <?php
 
 
-if(isset($_GET['detail']))
+if(isset($_GET['detail']) || isset($_GET['feedback']))
 {
 	$session =mysqli_query($account, "select *from job, user where job_id='$_GET[detail]' and job.employer_email=user.email");
 	$row=mysqli_fetch_array($session);
@@ -153,6 +155,29 @@ if(isset($_GET['detail']))
 	<?php 
 		echo "Email address: ". "<a href='user.php? user=$row[email]'>$row[email]</a>". "<br>";
 		echo "Contact Number: " . $row['contact_num'];
+		?>
+		<div class="feedback">
+			<form method="post" action="feedback.php">
+				<input type="hidden" name="applied" value=<?php echo $_GET['detail']; ?>>
+				<p>Feedback</p>
+				<?php
+					$sql=mysqli_query($account,"select *from feedback,user where feedback.applied_id='$_GET[detail]' and 
+					feedback.user_id=user.email");
+
+					while($row2=mysqli_fetch_array($sql))
+					{
+						echo "<p>{$row2['username']}</p>";
+						echo $row2['comment'];
+						echo "<hr>";
+					}
+
+				?>
+				<textarea cols="80" rows="2" name="comment"></textarea>
+				<input type="submit" name="feedback" value="Post">
+			</form>
+		</div>
+
+		<?php
 	
 }else if(isset($_GET['appliedJob']))
 	{
@@ -176,27 +201,29 @@ if(isset($_GET['detail']))
 			</script>";
 		}else{
 			
-			/*$sql="insert into applied(job_id, job_status,user_id)
-			values ('$id', 'waiting for reply', '$user')";
-			$data=mysqli_query($sql) or die (mysqli_connect_error());
-			if($data)
+			$result=mysqli_query($account, "select *from applied where user_id='$user'") or die (mysqli_connect_error());
+			$row=mysqli_fetch_array($result);
+
+			if($user == $row['user_id'] )
 			{
-				//header ("Location:findjob.php");
-				echo "<script type='text/javascript'>alert('Successfully apply the job.')
+				echo "<script type='text/javascript'>alert('You have applied before')
 				window.location='findjob.php'
 				</script>";
-			}*/
-			?>
-			<div class="application">
-				<form action="#" method="post">
-					<p>Email: <?php echo $user; ?></p>
-					<p>Contact Number: <?php echo $row2['contact_num']; ?></p>
-					<a href="#">Attach Your Resume</a>
-					<p>Word to Say: </p><textarea cols=100 rows=5 name="word"></textarea>
-					<input type="submit" name="send" value="Apply">
-				</form>
 
-			<?php
+			}else
+			{
+				$sql="insert into applied(job_id, job_status,user_id)
+				values ('$id', 'waiting for reply', '$user')";
+				$data=mysqli_query($account,$sql) or die (mysqli_connect_error());
+				if($data)
+				{
+					//header ("Location:findjob.php");
+					echo "<script type='text/javascript'>alert('Successfully apply the job.')
+					window.location='findjob.php'
+					</script>";
+				}
+			}
+
 		}
 
 		//echo $id;

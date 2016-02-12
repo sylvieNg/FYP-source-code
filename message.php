@@ -105,14 +105,21 @@ h1{
 </nav>
 			<div class="notification">
 				<?php
-				$session=mysqli_query($account,"Select applied.user_id ,job.job_name ,applied.job_status, 
+				$session=mysqli_query($account,"Select applied.applied_id, applied.user_id ,job.job_name ,applied.job_status, 
 					applied.date_created from applied,job where applied.job_id=job.job_id and job.employer_email='$user'");
 				while($row=mysqli_fetch_array($session))
 				{
 					echo "<p>Job Name: $row[job_name]</p>
 					<p>Email: <a href='applicant.php? person=$row[user_id]'>$row[user_id]</a></p>
 					<p>Status: $row[job_status]</p>
-					<p>Date Applied: $row[date_created]</p><br><br>";
+					<p>Date Applied: $row[date_created]</p>";
+
+					echo "<form method='post' action='hire.php'>
+					<input type='hidden' name='candidate' value='$row[user_id]'>
+					<input type='hidden' name='job' value='$row[job_name]'>
+					<input type='hidden' name='job_id' value='$row[applied_id]'>
+					<input type='submit' name='hire' value='Hire'>
+					</form><br><br>";
 				}
 				?>
 			</div>

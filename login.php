@@ -35,6 +35,9 @@ nav ul li a {
 	color: white; 
 	text-decoration: none;
 }
+h1{
+	color:white;
+}
 .searchbar{
 	float: right;
 	margin-right: 2em;
