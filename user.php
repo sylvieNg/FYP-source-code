@@ -85,7 +85,6 @@ nav ul ul li a:hover {
 	        <li class="dropdown"><a href="#">Setting</a>
 	        	<ul class="dropdown-menu">
 		        	<li><a href="info.php">Persona</a></li>
-					<li><a href="#">My reputation</a></li>
 					<li><a href="applied.php">My applied job</a></li>
 					<li><a href="deactivate.php">Deactivate</a></li>
 					<li><a href="logout.php">Logout</a></li>
@@ -97,7 +96,7 @@ nav ul ul li a:hover {
 <div class="container">
 <div class="profile">
 		<?php
-		$session=mysqli_query("select * from user,job,feedback where email='$_GET[user]'");
+		$session=mysqli_query($account,"select * from user,job,feedback where email='$_GET[user]'");
 		$row=mysqli_fetch_array($session);
 
 		if($login_session=='guest')

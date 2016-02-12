@@ -101,7 +101,6 @@ h1{
 	        <li class="dropdown"><a href="#">Setting</a>
 	        	<ul class="dropdown-menu">
 		        	<li><a href="employerinfo.php">Persona</a></li>
-					<li><a href="#">My feedback</a></li>
 					<li><a href="message.php">My message</a></li>
 					<li><a href="#">Deactivate</a></li>
 					<li><a href="logout.php">Logout</a></li>
