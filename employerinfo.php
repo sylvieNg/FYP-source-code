@@ -97,12 +97,13 @@ h1{
     	<ul class="navbar-item">
     		<center><h1>Online Part Time Job</h1></center>
     		<h3> <span id="Welcome" style="color:MintCream ">Welcome back, <i><?php echo $login_session;?></i></span></h3>
+    		<li class="postjob"><a href="postjob.php">Post Job</a></li>
 	        <li class="active"><a href="findjob.php">Find Jobs</a></li>
 	        <li class="dropdown"><a href="#">Setting</a>
 	        	<ul class="dropdown-menu">
 		        	<li><a href="employerinfo.php">Persona</a></li>
 					<li><a href="message.php">My message</a></li>
-					<li><a href="#">Deactivate</a></li>
+					<li><a href="deactivate.php">Deactivate</a></li>
 					<li><a href="logout.php">Logout</a></li>
 	        	</ul>
 	        </li>
