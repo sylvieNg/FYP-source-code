@@ -114,13 +114,24 @@ h1{
 <section class="profile">
 		<div class="container">
 			<div class="profile_picture">
-				<img src="uploads/<?= $picture[ rand(0,count($picture) -1) ] ?>"  width="300" height="300">
+				<?php
+		$picture = array();
+		$user=$_SESSION['email'];
+		$image_sql = "SELECT * FROM image where user_id='$user' and date_updated in (select max(date_updated)from image)";
+		$Image_result = mysqli_query($account, $image_sql); 
+		while ($row = mysqli_fetch_array($Image_result)){
+		  array_push($picture, $row["name"]);
+		  ?>
+		  <img src="uploads/<?echo $row['image_name'] ?>"  width="300" height="300">
+		  <?php
+		}
+		?>
 		<div>
-		<form method ="post" action="fileupload.php" enctype="multipart/form-data">
+		<form method ="post" action="imageupload.php" enctype="multipart/form-data">
 			<h3>Image Upload</h3>
 			<input type="file" name="fileToUpload" id="fileToUpload">
 			<br><br>
-			<input type="submit" value="Upload" name="imageFile">
+			<input type="submit" value="Upload Image" name="submit">
 		</form>
 	</div>
 	<div class="info">
