@@ -117,6 +117,19 @@ h1{
 		Username: {$row['username']}<br>
 		Email: {$row['email']}<br>
 		Contact Number: {$row['contact_num']}</p>";
+
+		$resume = array();
+        $user=$_SESSION['email'];
+        $image_sql = "SELECT * FROM resume where user_id='$row[email]' order by date_updated desc limit 1";
+        $Image_result = mysqli_query($account, $image_sql); 
+        while ($row2 = mysqli_fetch_array($Image_result)){
+          array_push($resume, $row2["file_name"]);
+          ?>
+          <a href="resume/<?php echo $row2['file_name'] ?>" target="_blank">view file</a>
+          <?php
+        }
+
+
 	}
 	?>
 	</div>

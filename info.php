@@ -129,12 +129,12 @@ h3{
 		<?php
 		$picture = array();
 		$user=$_SESSION['email'];
-		$image_sql = "SELECT * FROM image where user_id='$user' and date_updated in (select max(date_updated)from image)";
+		$image_sql = "SELECT * FROM image where user_id='$user' order by date_updated desc limit 1";
 		$Image_result = mysqli_query($account, $image_sql); 
 		while ($row = mysqli_fetch_array($Image_result)){
-		  array_push($picture, $row["name"]);
+		  array_push($picture, $row["image_name"]);
 		  ?>
-		  <img src="uploads/<?echo $row['image_name'] ?>"  width="300" height="300">
+		  <img src="uploads/<?echo $row['image_name']?>"  width="300" height="300">
 		  <?php
 		}
 		?>
@@ -177,12 +177,7 @@ h3{
 				
 			</tbody>
 		</table>
-		<form method="post" action"fileupload.php" enctype="multipart/form-data">
-			<h3>Resume Upload</h3>
-			<input type="file" name="fileToUpload" id="fileToUpload">
-			<br><br>
-    		<input type="submit" value="Upload Resume" name="submit">
-		</form>
+		<a href="resume.php">Resume</a>
 	</div>
 </div>
 </section>

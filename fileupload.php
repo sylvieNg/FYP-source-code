@@ -1,3 +1,73 @@
+<?php
+
+include('database.php');
+include('session.php');
+
+$target_dir = "resume/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+// Check if image file is a actual image or fake image
+if(isset($_POST["resume"])) {
+    echo "Uploading....";
+}
+// Check if file already exists
+if (file_exists($target_file)) {
+
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 100000000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+// Allow certain file formats
+if($imageFileType != "pdf" && $imageFileType != "txt" && $imageFileType != "docx") {
+    echo "Sorry, only PDF, txt & DOCX files are allowed.";
+    $uploadOk = 0;
+}
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+
+        $resume = basename( $_FILES["fileToUpload"]["name"]);
+        //echo $picture;
+        $file_size=$_FILES['fileToUpload']['size'];
+        //echo $image_size;
+        $file_type = $_FILES['fileToUpload']['type'];
+        //echo $image_type;
+        $user=$_SESSION['email'];
+        //echo $user;
+
+        $insert_image_sql = "INSERT INTO resume 
+        (file_type,file_size,file_name,user_id) 
+        VALUES (?,?,?,?)";
+
+        $stmt = mysqli_prepare($account, $insert_image_sql);
+
+        if ($stmt)
+        {
+            mysqli_stmt_bind_param($stmt,"ssss",$file_type,$file_size,$resume,$user);
+            mysqli_stmt_execute($stmt);
+            if (mysqli_affected_rows($account))    
+            {
+                mysqli_stmt_close($stmt);  
+                //update was successful
+                $id = mysqli_insert_id($account);
+            }
+        }
+        //header("Location:info.php");
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
+
+?>
 <html lang="en">
 <head>
     <style>
@@ -127,51 +197,3 @@ h1{
 </nav>
     </body>
     </html>
-<?php
-include('database.php');
-include('session.php');
-
-$target_dir = "resume/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-    // Check if file already exists
-if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
-    $uploadOk = 0;
-}
-// Check file size
-if ($_FILES["fileToUpload"]["size"] > 1000000) {
-    echo "Sorry, your file is too large.";
-    $uploadOk = 0;
-}
-// Allow certain file formats
-if($imageFileType != "docx" && $imageFileType != "txt" && $imageFileType != "pdf" ) {
-    echo "Sorry, only DOCX, PDF, PNG & TXT files are allowed.";
-    $uploadOk = 0;
-}
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        //echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-        $stmt = mysqli_stmt_init($account);
-	    $insert_resume_sql = "INSERT INTO resume (resume_name) VALUES (?)";
-	    header("Location:info.php");/*
-	    if (mysqli_stmt_prepare($stmt, $insert_resume_sql))
-	    {
-	        mysqli_stmt_bind_param($stmt, "s", $_FILES["fileToUpload"]["name"]);
-	        mysqli_execute($stmt);
-	    }*/
-
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }
-}
-}
-
-?>

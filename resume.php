@@ -72,6 +72,12 @@ nav ul ul li a:hover {
 h1{
     color:white;
 }
+.left{
+    width: 400px;
+    height: 500px;
+    float: left;
+    padding-left: 5em;
+}
     </style>
     </head>
     <body>
@@ -134,9 +140,22 @@ h1{
             <h3>Resume Upload</h3>
             <input type="file" name="fileToUpload" id="fileToUpload">
             <br><br>
-            <input type="submit" value="Upload Resume" name="submit">
+            <input type="submit" value="Upload Resume" name="resume">
         </form>
-    </div>
+        <?php
+        $resume = array();
+        $user=$_SESSION['email'];
+        $image_sql = "SELECT * FROM resume where user_id='$user' order by date_updated desc limit 1";
+        $Image_result = mysqli_query($account, $image_sql); 
+        while ($row = mysqli_fetch_array($Image_result)){
+          array_push($resume, $row["file_name"]);
+          ?>
+          <a href="resume/<?php echo $row['file_name'] ?>" target="_blank">view file</a>
+          <?php
+        }
+
+        ?>
+</div>
 </div>
 </body>
 </html>

@@ -21,7 +21,7 @@ if(isset($_POST['hire']))
 		echo "<script type='text/javascript'>alert('HIRED')
 		window.location='employerinfo.php'</script>";
 
-		$to=$email;
+				$to=$candidate;
 				$subject ="Successfully hired";
 				$from ='givemejob.be';
 				$body= "Hi, \n\n";
@@ -29,8 +29,8 @@ if(isset($_POST['hire']))
 				$body .= $row['username'] . "(". $user. ")";
 				$body .= "as a";
 				$body .= $job;
-				$header="From: ".strip_tags($candidate);
-				$header .="<br/>Reply to :" .strip_tags($candidate);
+				$header="From: ".strip_tags($from);
+				$header .="<br/>Reply to :" .strip_tags($from);
 
 				mail($to, $subject, $body, $header);
 	}

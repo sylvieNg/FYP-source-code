@@ -117,7 +117,7 @@ h1{
 				<?php
 		$picture = array();
 		$user=$_SESSION['email'];
-		$image_sql = "SELECT * FROM image where user_id='$user' and date_updated in (select max(date_updated)from image)";
+		$image_sql = "SELECT * FROM image where user_id='$user' order by date_updated desc limit 1";
 		$Image_result = mysqli_query($account, $image_sql); 
 		while ($row = mysqli_fetch_array($Image_result)){
 		  array_push($picture, $row["name"]);
